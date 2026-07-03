@@ -18,8 +18,15 @@ model/
 *.h5
 
 # Streamlit local state
+.streamlit/
 .streamlit/secrets.toml
 
-# OS files
+# Environment files
+.env
+.env.*
+
+# OS and editor files
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/

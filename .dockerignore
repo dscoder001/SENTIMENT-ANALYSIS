@@ -1,22 +1,28 @@
 # Python
 __pycache__/
+*.py[cod]
 *.pyc
 *.pyo
 .venv/
 venv/
 env/
+.env
+.env.*
 
 # Notebooks / local artifacts
 *.ipynb
 .ipynb_checkpoints/
 model/
+screenshots/
+.streamlit/
 
 # Git / IDE / OS
 .git/
 .gitignore
-.idea/
 .vscode/
+.idea/
 .DS_Store
+Thumbs.db
 
 # Docs that don't belong in the image
 README.md

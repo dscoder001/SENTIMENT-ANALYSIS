@@ -1,53 +1,116 @@
+# 🍽️ Restaurant Review Sentiment Analysis
+
+End-to-end NLP project that classifies restaurant reviews as **Positive** or
+**Negative**, served as a Dockerized [Streamlit](https://streamlit.io/) web app.
+
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5-orange)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED)
+![Accuracy](https://img.shields.io/badge/test%20accuracy-82.7%25-success)
+
+## 🚀 demo
+
+<!-- After deploying on Render, paste the URL here -->
+![Screenshot 1](screenshots\Screenshot.png)
+![Screenshot 2](screenshots\Screenshot2.png)
+![Screenshot 3](screenshots\Screenshot3.png)
+> Note: the free tier sleeps after inactivity — the first load can take ~30s to wake up.
 
 
-# Sentiment Analysis Project 🎉
+## 📊 Overview
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dscoder001/SENTIMENT-ANALYSIS/blob/main/NLP_PROJECT.ipynb)
+The model is trained on 1,000 labelled restaurant reviews and predicts customer
+sentiment from raw text. The full path is covered: data cleaning → TF-IDF feature
+extraction → model selection → serialization → web app → container → cloud deploy.
 
-## Overview 📊
+| Stage | Tooling |
+|-------|---------|
+| Feature extraction | `TfidfVectorizer` (scikit-learn) |
+| Classifier | `SVC` (Support Vector Classifier) |
+| Serving | Streamlit |
+| Packaging | Docker |
+| Hosting | Render (free tier) |
 
-This project focuses on **sentiment analysis** using Natural Language Processing (NLP) techniques. It involves analyzing and classifying the sentiment of restaurant reviews, helping businesses understand customer opinions.
+## 🧪 Model selection
 
-## Author 👤
+Four approaches were compared on a held-out test set (22% split). TF-IDF features
+outperformed raw counts, and the **TF-IDF + SVC pipeline** won:
 
-**Dhiman Saha**
+| Model | Vectorizer | Test accuracy |
+|-------|------------|---------------|
+| **SVC (pipeline)** ✅ | **TF-IDF** | **82.7%** |
+| MultinomialNB (pipeline) | TF-IDF | 81.4% |
+| MultinomialNB (pipeline) | CountVectorizer | 80.5% |
+| SVC (pipeline) | CountVectorizer | 80.0% |
 
-## Environment 🌐
+Full classification report (test set):
 
-The project is developed and tested in **Google Colab** for easy access and collaboration.
+```
+              precision    recall  f1-score   support
+    Negative       0.81      0.84      0.82       106
+    Positive       0.85      0.82      0.83       114
+    accuracy                           0.83       220
+```
 
-## Libraries Used 📚
+## 🗂️ Project structure
 
-- **NumPy** (`np`): For numerical operations.
-- **Pandas** (`pd`): For handling datasets.
-- **Scikit-learn**:
-  - `train_test_split`: To train and split the data.
-  - `TfidfVectorizer`: To create the TF-IDF vectors.
-  - `Support Vector Classifier (SVC)`: For classification.
-  - `make_pipeline`: For creating pipelines.
-  - `MultinomialNB`: For Naive Bayes classification.
+```
+sentiment-analysis/
+├── train.py                 # trains TF-IDF + SVC, saves model/sentiment_pipeline.joblib
+├── app.py                   # Streamlit web app
+├── requirements.txt         # pinned dependencies
+├── Dockerfile               # builds the container (trains model at build time)
+├── .dockerignore
+├── Restaurant_Reviews.tsv   # dataset (1,000 reviews)
+└── NLP_PROJECT.ipynb        # original exploratory notebook
+```
 
-## Project Structure 🗂️
+## 🏃 Run locally (without Docker)
 
-1. **Importing Libraries**: Initial setup and importing necessary libraries.
-2. **Reading Data**: Loading and preparing the dataset (`job_postings_raw.dat`).
-3. **Data Analysis**: Identifying patterns and insights in the data.
-4. **Feature Engineering**: Creating TF-IDF vectors.
-5. **Model Training**: Training models using SVC and Naive Bayes classifiers.
-6. **Evaluation**: Evaluating the performance of the models.
+```bash
+git clone https://github.com/dscoder001/SENTIMENT-ANALYSIS.git
+cd SENTIMENT-ANALYSIS
 
-## How to Run 🏃‍♂️
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/dscoder001/SENTIMENT-ANALYSIS.git
-2. Open the project in Google Colab by clicking the "Open In Colab" badge above.
-3. Run the cells in the notebook sequentially to reproduce the results.
-   
+python train.py            # trains the model -> model/sentiment_pipeline.joblib
+streamlit run app.py       # opens http://localhost:8501
+```
 
-### Key Changes:
-- Added emojis to make sections more engaging.
-- Enhanced formatting for better readability.
-- Maintained all the original content while making it visually appealing.
+## 🐳 Run with Docker
 
-Feel free to adjust any emojis or wording further to match your personal style!
+The image trains the model during the build, so it ships ready to serve.
+
+```bash
+# build the image
+docker build -t sentiment-app .
+
+# run it, mapping host port 8501 -> container port 8501
+docker run -p 8501:8501 sentiment-app
+```
+
+Then open **http://localhost:8501** in your browser.
+
+> `--server.address=0.0.0.0` in the Dockerfile is what makes the app reachable
+> from your host browser — without it, Streamlit only listens inside the container.
+
+## ☁️ Deploy on Render
+
+Render reads the `Dockerfile` directly — no extra config needed.
+
+1. Push this repo to GitHub.
+2. On [render.com](https://render.com): **New + → Web Service**, select this repo.
+3. Render auto-detects the Dockerfile. Instance type: **Free**.
+4. **Create Web Service** — first build takes 3–5 minutes.
+5. Copy the public URL into the **Live demo** section above.
+
+## 🛠️ Tech stack
+
+`Python` · `pandas` · `scikit-learn` · `Streamlit` · `Docker` · `Render`
+
+## 👤 Author
+
+**Dhiman Saha** — [GitHub](https://github.com/dscoder001)
+
+Dataset: [Restaurant Reviews (Kaggle)](https://www.kaggle.com/datasets/d4rklucif3r/restaurant-reviews)

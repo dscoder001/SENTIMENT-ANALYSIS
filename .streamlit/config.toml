@@ -1,0 +1,10 @@
+[client]
+showErrorDetails = true
+
+[server]
+port = 8501
+headless = true
+runOnSave = true
+
+[telemetry]
+enabled = false

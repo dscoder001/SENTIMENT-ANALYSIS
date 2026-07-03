@@ -1,0 +1,25 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Model artifacts and local outputs
+model/
+*.joblib
+*.pkl
+*.h5
+
+# Streamlit local state
+.streamlit/secrets.toml
+
+# OS files
+.DS_Store
+Thumbs.db

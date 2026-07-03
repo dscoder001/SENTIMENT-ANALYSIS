@@ -10,10 +10,12 @@ End-to-end NLP project that classifies restaurant reviews as **Positive** or
 
 ## 🚀 demo
 
-<!-- After deploying on Render, paste the URL here -->
-![Screenshot 1](screenshots\Screenshot.png)
-![Screenshot 2](screenshots\Screenshot2.png)
-![Screenshot 3](screenshots\Screenshot3.png)
+The app running locally in Docker — enter a review and get a sentiment
+prediction with a confidence score.
+
+![Screenshot 1](screenshots/Screenshot.png)
+![Screenshot 2](screenshots/Screenshot2.png)
+![Screenshot 3](screenshots/Screenshot3.png)
 > Note: the free tier sleeps after inactivity — the first load can take ~30s to wake up.
 
 
